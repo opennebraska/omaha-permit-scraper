@@ -17,7 +17,7 @@ class OmahaPermitParser
     @permit_type = permit_type
     @agent = get_new_agent
     @logger = Logger.new($stderr)
-    @logger.info("Initialized for: " + start_date.to_s)
+    @logger.info("Initialized for: " + start_date.to_s + ", \"" + permit_type + "\"")
   end
 
   def scrape
@@ -46,6 +46,9 @@ class OmahaPermitParser
     rows = page_object.search('//*[@id="ctl00_PlaceHolderMain_dgvPermitList_gdvPermitList"]/tr')
     (2..11).each do |index|
       permit_row = Hash.new
+      unless(rows[index] && rows[index].search('td')[2])
+        break
+      end
       if(rows[index].search('td')[2].search('span').first)
         permit_row[:date] = rows[index].search('td')[2].search('span').first.text
       else
@@ -89,6 +92,7 @@ class OmahaPermitParser
 
   def get_new_agent
     agent = Mechanize.new do |a| 
+      a.read_timeout=30
       a.log = @logger
       #  a.log.level = 1 
       a.user_agent_alias = 'Mac Safari'
