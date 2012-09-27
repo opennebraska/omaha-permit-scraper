@@ -12,11 +12,12 @@ class OmahaPermitParser
   attr_accessor :start_date, :end_date, :permit_type, :agent, :logger
 
   def initialize(start_date, end_date, permit_type=nil)
-    @start_date = start_date
-    @end_date = end_date
+    @start_date = start_date.strftime("%m/%d/%Y")
+    @end_date = end_date.strftime("%m/%d/%Y")
     @permit_type = permit_type
     @agent = get_new_agent
     @logger = Logger.new($stderr)
+    @logger.info("Initialized for: " + start_date.to_s)
   end
 
   def scrape
