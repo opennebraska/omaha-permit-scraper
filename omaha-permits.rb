@@ -21,7 +21,7 @@ class OmahaPermitParser
   end
 
   def scrape
-    search
+    process
   end
 
   private
@@ -96,7 +96,7 @@ class OmahaPermitParser
     return agent
   end
 
-  def run
+  def process
     login_url = 'https://www.omahapermits.com/PermitInfo/Cap/CapHome.aspx?module=Permits&TabName=Permits'
     @logger.info "Loading search form"
     page = agent.get(login_url)
